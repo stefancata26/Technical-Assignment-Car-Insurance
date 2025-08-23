@@ -18,6 +18,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         modelBuilder.Entity<InsurancePolicy>()
             .Property(p => p.StartDate)
             .IsRequired();
+        
+        // Task A: EndDate required at database level
+        modelBuilder.Entity<InsurancePolicy>()
+            .Property(p => p.EndDate).IsRequired();
 
         // EndDate intentionally left nullable for a later task
     }
@@ -41,7 +45,7 @@ public static class SeedData
 
         db.Policies.AddRange(
             new InsurancePolicy { CarId = car1.Id, Provider = "Allianz", StartDate = new DateOnly(2024,1,1), EndDate = new DateOnly(2024,12,31) },
-            new InsurancePolicy { CarId = car1.Id, Provider = "Groupama", StartDate = new DateOnly(2025,1,1), EndDate = null }, // open-ended on purpose
+            new InsurancePolicy { CarId = car1.Id, Provider = "Groupama", StartDate = new DateOnly(2025,1,1), EndDate = new DateOnly(2025,10,26) }, //Task A: assigned valid date
             new InsurancePolicy { CarId = car2.Id, Provider = "Allianz", StartDate = new DateOnly(2025,3,1), EndDate = new DateOnly(2025,9,30) }
         );
         db.SaveChanges();

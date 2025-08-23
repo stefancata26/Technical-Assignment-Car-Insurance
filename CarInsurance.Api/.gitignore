@@ -7,6 +7,9 @@
 [Ll]og/
 [Ll]ogs/
 
+# EF Core Migrations
+Migrations/
+
 # User-specific files
 *.user
 *.rsuser
