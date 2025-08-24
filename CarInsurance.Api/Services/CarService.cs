@@ -22,6 +22,13 @@ public class CarService(AppDbContext db)
         var carExists = await _db.Cars.AnyAsync(c => c.Id == carId);
         if (!carExists) throw new KeyNotFoundException($"Car {carId} not found");
 
+        // Task C: Check impossible date
+        var today = DateOnly.FromDateTime(DateTime.Today);
+        if (date.Year < 1900 || date > today.AddYears(10))
+        {
+            throw new ArgumentException("Date must be between 1900 and 10 years from today.");
+        }
+
         return await _db.Policies.AnyAsync(p =>
             p.CarId == carId &&
             p.StartDate <= date &&

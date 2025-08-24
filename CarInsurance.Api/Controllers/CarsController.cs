@@ -14,6 +14,7 @@ public class CarsController(CarService service) : ControllerBase
     public async Task<ActionResult<List<CarDto>>> GetCars()
         => Ok(await _service.ListCarsAsync());
 
+    // Task C: Harden the insurance validity
     [HttpGet("cars/{carId:long}/insurance-valid")]
     public async Task<ActionResult<InsuranceValidityResponse>> IsInsuranceValid(long carId, [FromQuery] string date)
     {
@@ -25,9 +26,13 @@ public class CarsController(CarService service) : ControllerBase
             var valid = await _service.IsInsuranceValidAsync(carId, parsed);
             return Ok(new InsuranceValidityResponse(carId, parsed.ToString("yyyy-MM-dd"), valid));
         }
-        catch (KeyNotFoundException)
+        catch (KeyNotFoundException ex)
         {
-            return NotFound();
+            return NotFound(ex.Message);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
         }
     }
 
